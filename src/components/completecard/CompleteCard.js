@@ -12,16 +12,31 @@ class CompleteCard extends Component {
     };
 
     render() {
+        let movieCard = this.props.item;
+        let year = "Year : ";
+        let imdb = "IMDB : ";
+        let type = "Type : ";
         return (
             <View style={styles.completeContainer}>
                 <Header
+                    title={movieCard.Title}
                     onPress={() => this.goBackToList()}
                     icon={"arrow-back"}/>
                 <ScrollView>
                     <View style={styles.completeCardContainer}>
                         <Image
-                            source={{uri: this.props.item.Poster}}
+                            source={{uri: movieCard.Poster}}
                             style={styles.completeCardImage}/>
+                        <View style={styles.completeCardTextView}>
+                            <Text numberOfLines={2}
+                                  style={styles.completeTitleStyle}>{movieCard.Title}</Text>
+                            <Text style={styles.completeTypeStyle}>
+                                {type}{movieCard.Type}</Text>
+                            <Text style={styles.completeIdStyle}>
+                                {imdb}{movieCard.imdbID}</Text>
+                            <Text style={styles.completeYearStyle}>
+                                {year}{movieCard.Year}</Text>
+                        </View>
                     </View>
                 </ScrollView>
             </View>

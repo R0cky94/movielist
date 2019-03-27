@@ -1,25 +1,47 @@
-import {REQUEST_LIST, RECEIVED,NOT_RECEIVED} from '../Type';
+import {REQUEST_LIST, RECEIVED, NOT_RECEIVED, ADD_FAVOURITE, REMOVE_FAVOURITE} from '../Type';
 import axios from 'axios';
 
 
-export const getListOfMovie = () => {
+export const getListOfMovie = (text) => {
     return (dispatch) => {
         dispatch({type: REQUEST_LIST});
-        axios.get("http://www.omdbapi.com/?apikey=e6ba0eba&s=batman&page=avengers")
-            .then(response => loginUserSuccess(dispatch,response))
-            .catch((error) => loginUserFail(dispatch,error))
+        let searchTitle = '';
+        if (text === undefined) {
+            searchTitle = "titanic";
+        } else {
+            searchTitle = text;
+        }
+        axios.get("http://www.omdbapi.com/?apikey=e6ba0eba&s=" + searchTitle)
+            .then((response) => loginUserSuccess(dispatch, response))
+            .catch((error) => loginUserFail(dispatch, error))
     }
-
 };
-const loginUserSuccess = (dispatch,response) => {
+
+const loginUserSuccess = (dispatch, response) => {
     dispatch({
         type: RECEIVED,
         send: response.data.Search
-    })
+    });
 };
-const loginUserFail = (dispatch,error) => {
+const loginUserFail = (dispatch, error) => {
     dispatch({
         type: NOT_RECEIVED,
         send: error
-    })
+    });
+};
+export const addToFavourite = (item) => {
+    return (dispatch) => {
+        dispatch({
+            type: ADD_FAVOURITE,
+            send: item
+        });
+    }
+};
+export const removeFavourite = (item) => {
+    return (dispatch) => {
+        dispatch({
+            type: REMOVE_FAVOURITE,
+            send: item
+        });
+    }
 };

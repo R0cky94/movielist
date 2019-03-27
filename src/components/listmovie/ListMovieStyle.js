@@ -25,18 +25,29 @@ const styles = StyleSheet.create({
     },
     cardTitleStyle: {
         fontSize: 20,
-        color:"#000",
-        width: 200,
+        color: "#000",
+        width: 170,
     },
-    cardOverViewText:{
+    cardOverViewText: {
         fontSize: 16,
         color: "#4b4b4b",
         width: 200,
         marginVertical: 10
     },
-    cardDateText:{
-        fontSize:14,
-        color:"#777777",
-    }
+    cardDateText: {
+        fontSize: 14,
+        color: "#777777",
+    },
+    cardListTitleView: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center"
+    },
+    selectHeart: {
+        color: "#ff3a52"
+    },
+    off: {
+        color: "#e3e3e3",
+    },
 });
 export default styles;
