@@ -1,21 +1,37 @@
 import React, {Component} from 'react';
-import {View, FlatList, Image, Text, TouchableOpacity} from 'react-native';
+import {View, Image, Text, TouchableOpacity, ToastAndroid} from 'react-native';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import styles from './FavouriteListStyle'
 import Header from "../common/Header";
-import Spinner from "../common/Indicator";
+import {updateFavourite} from '../../store/action/MovielistAction'
 
 class FavouriteList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            movieList: []
+        }
+    }
+
     goBack = () => {
         Actions.movieList()
+    };
+    removeFavourite = (item) => {
+        let favouriteList = this.props.favouriteList;
+        for (let i = 0; i < favouriteList.length; i++) {
+            if (favouriteList[i].imdbID === item.imdbID) {
+                favouriteList.splice(i, 1);
+                this.props.updateFavourite(favouriteList);
+                ToastAndroid.show('Removed successfully !', ToastAndroid.LONG);
+            }
+        }
     };
 
     render() {
         let year = "year : ";
         let type = "Type : ";
-        let movieList = this.props.favouriteList;
-        console.log(movieList, "favourite list");
+        let favouriteList = this.props.favouriteList;
         return (
             <View>
                 <Header
@@ -24,24 +40,30 @@ class FavouriteList extends Component {
                     icon={"arrow-back"}/>
                 <View style={styles.flatFavouriteContainer}>
                     {
-                        this.props.spinner ? <Spinner/> :
-                            <FlatList data={movieList}
-                                      keyExtractor={(item, itemIndex) => item.toString()}
-                                      renderItem={({item, listIndex}) => (
-                                          <View key={listIndex} style={styles.flatFavouriteCardContainer}>
-                                              <Image style={styles.FavouriteCardImageStyle}
-                                                     source={{uri: item.Poster}}/>
-                                              <View style={styles.cardTextFavouriteContainer}>
-                                                  <Text
-                                                      numberOfLines={2}
-                                                      style={styles.cardTitleStyle}>{item.Title}</Text>
-                                                  <Text style={styles.cardOverViewText}
-                                                        numberOfLines={2}>{type}{item.Type}</Text>
-                                                  <Text style={styles.cardDateText}>{year}{item.Year}</Text>
-                                              </View>
-                                          </View>
-                                      )}
-                            />
+                        favouriteList ?
+                            favouriteList.map((item, index) => {
+                                console.log(item, "favouriteList");
+                                return (
+                                    <View key={index} style={styles.flatFavouriteCardContainer}>
+                                        <Image style={styles.FavouriteCardImageStyle}
+                                               source={{uri: item.Poster}}/>
+                                        <View style={styles.cardTextFavouriteContainer}>
+                                            <View style={styles.favouriteTitleView}>
+                                                <Text
+                                                    numberOfLines={4}
+                                                    style={styles.cardFavouriteTitleStyle}>{item.Title}</Text>
+                                                <TouchableOpacity onPress={() => this.removeFavourite(item)}>
+                                                    <Text style={styles.removeTextStyle}>Remove</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            <Text style={styles.favouriteOverViewText}
+                                                  numberOfLines={2}>{type}{item.Type}</Text>
+                                            <Text style={styles.favouriteDateText}>{year}{item.Year}</Text>
+                                        </View>
+                                    </View>
+                                )
+                            }) :
+                            <Text style={{alignSelf: "center", color: "#6b6b6b"}}>No favourites</Text>
                     }
                 </View>
             </View>
@@ -50,10 +72,9 @@ class FavouriteList extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state, "favourite");
     return {
-        favouriteList: state.indexList.movieList,
+        favouriteList: state.indexList.favourite,
     }
 }
 
-export default connect(mapStateToProps, {})(FavouriteList);
+export default connect(mapStateToProps, {updateFavourite})(FavouriteList);

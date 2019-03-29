@@ -1,6 +1,6 @@
-import {REQUEST_LIST, RECEIVED,NOT_RECEIVED,ADD_FAVOURITE,REMOVE_FAVOURITE} from '../Type'
+import {REQUEST_LIST, RECEIVED, NOT_RECEIVED, ADD_FAVOURITE, REMOVE_FAVOURITE} from '../Type'
 
-const INITIAL_STATE = {movieList: '', loading: false,favourite:[],nonFavourite:''};
+const INITIAL_STATE = {movieList: '', loading: false, favourite: [], unFavourite: ''};
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -9,11 +9,11 @@ export default (state = INITIAL_STATE, action) => {
         case RECEIVED:
             return {...state, movieList: action.send, loading: false};
         case NOT_RECEIVED:
-            return {...state, movieList: action.send, loading: false};
+            return {...state, nonFavourite: action.send, loading: false};
         case ADD_FAVOURITE:
-            return {...state, favourite: action.send, };
+            return {...state, favourite: [...state.favourite, action.send]};
         case REMOVE_FAVOURITE:
-            return {...state, nonFavourite: action.send, };
+            return {...state, favourite: action.send};
         default:
             return {...state}
     }

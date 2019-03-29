@@ -35,13 +35,13 @@ export const addToFavourite = (item) => {
             type: ADD_FAVOURITE,
             send: item
         });
-    }
+    };
 };
-export const removeFavourite = (item) => {
+export const updateFavourite = (favouriteList) => {
     return (dispatch) => {
         dispatch({
             type: REMOVE_FAVOURITE,
-            send: item
+            send: favouriteList
         });
     }
 };
